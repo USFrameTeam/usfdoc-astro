@@ -2,6 +2,8 @@ import sharp from 'sharp';
 import { readFile, writeFile, readdir } from 'node:fs/promises';
 import { join, extname, relative } from 'node:path';
 
+const CONCURRENCY = 4;
+
 /**
  * 递归查找目录下匹配扩展名的文件
  */
@@ -15,6 +17,54 @@ async function findFiles(dir, extensions) {
     } else if (extensions.includes(extname(entry.name).toLowerCase())) {
       results.push(fullPath);
     }
+  }
+  return results;
+}
+
+/**
+ * 转换单张图片为 AVIF 和 WebP
+ */
+async function convertImage(file, outputDir) {
+  const inputBuffer = await readFile(file);
+  const originalSize = inputBuffer.length;
+  const relativePath = relative(outputDir, file);
+
+  const [avifBuffer, webpBuffer] = await Promise.all([
+    sharp(inputBuffer)
+      .avif({ quality: 65, effort: 6, chromaSubsampling: '4:2:0' })
+      .toBuffer(),
+    sharp(inputBuffer)
+      .webp({ quality: 75 })
+      .toBuffer(),
+  ]);
+
+  await Promise.all([
+    writeFile(file.replace(/\.[^.]+$/, '.avif'), avifBuffer),
+    writeFile(file.replace(/\.[^.]+$/, '.webp'), webpBuffer),
+  ]);
+
+  const avifSaved = originalSize - avifBuffer.length;
+  const avifReduction = ((avifSaved / originalSize) * 100).toFixed(1);
+  const webpSaved = originalSize - webpBuffer.length;
+  const webpReduction = ((webpSaved / originalSize) * 100).toFixed(1);
+  const totalSaved = avifSaved + webpSaved;
+
+  console.log(
+    `  ${relativePath} → AVIF (${(originalSize / 1024).toFixed(1)}KB → ${(avifBuffer.length / 1024).toFixed(1)}KB, -${avifReduction}%) | WebP (-${webpReduction}%)`
+  );
+
+  return { converted: 1, totalSaved };
+}
+
+/**
+ * 分批并发执行
+ */
+async function runWithConcurrency(tasks, limit) {
+  const results = [];
+  for (let i = 0; i < tasks.length; i += limit) {
+    const batch = tasks.slice(i, i + limit);
+    const batchResults = await Promise.all(batch.map((task) => task()));
+    results.push(...batchResults);
   }
   return results;
 }
@@ -39,52 +89,16 @@ export function convertToAvif() {
           return;
         }
 
-        console.log(`[convert-images] 找到 ${files.length} 张图片，开始转换...`);
+        console.log(`[convert-images] 找到 ${files.length} 张图片，并发 ${CONCURRENCY}，开始转换...`);
 
-        let converted = 0;
-        let totalSaved = 0;
+        const tasks = files.map((file) => () => convertImage(file, outputDir));
+        const results = await runWithConcurrency(tasks, CONCURRENCY);
 
-        for (const file of files) {
-          try {
-            const inputBuffer = await readFile(file);
-            const originalSize = inputBuffer.length;
-            const relativePath = relative(outputDir, file);
-
-            // 生成 AVIF
-            const avifPath = file.replace(/\.[^.]+$/, '.avif');
-            const avifBuffer = await sharp(inputBuffer)
-              .avif({ quality: 65, effort: 6, chromaSubsampling: '4:2:0' })
-              .toBuffer();
-            await writeFile(avifPath, avifBuffer);
-
-            const avifSaved = originalSize - avifBuffer.length;
-            const avifReduction = ((avifSaved / originalSize) * 100).toFixed(1);
-            console.log(
-              `  ${relativePath} → AVIF (${(originalSize / 1024).toFixed(1)}KB → ${(avifBuffer.length / 1024).toFixed(1)}KB, -${avifReduction}%)`
-            );
-
-            // 生成 WebP
-            const webpPath = file.replace(/\.[^.]+$/, '.webp');
-            const webpBuffer = await sharp(inputBuffer)
-              .webp({ quality: 75 })
-              .toBuffer();
-            await writeFile(webpPath, webpBuffer);
-
-            const webpSaved = originalSize - webpBuffer.length;
-            const webpReduction = ((webpSaved / originalSize) * 100).toFixed(1);
-            console.log(
-              `  ${relativePath} → WebP (${(originalSize / 1024).toFixed(1)}KB → ${(webpBuffer.length / 1024).toFixed(1)}KB, -${webpReduction}%)`
-            );
-
-            totalSaved += avifSaved + webpSaved;
-            converted++;
-          } catch (err) {
-            console.error(`  [错误] 转换失败: ${file}`, err.message);
-          }
-        }
+        const totalConverted = results.reduce((sum, r) => sum + r.converted, 0);
+        const totalSaved = results.reduce((sum, r) => sum + r.totalSaved, 0);
 
         console.log(
-          `[convert-images] 完成！转换 ${converted} 张图片（AVIF + WebP），共节省 ${(totalSaved / 1024).toFixed(1)}KB`
+          `[convert-images] 完成！转换 ${totalConverted} 张图片，共节省 ${(totalSaved / 1024).toFixed(1)}KB`
         );
       },
     },

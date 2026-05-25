@@ -1,25 +1,9 @@
 ---
-import LanguageSelect from 'virtual:starlight/components/LanguageSelect';
-import Search from 'virtual:starlight/components/Search';
 import SiteTitle from 'virtual:starlight/components/SiteTitle';
+import Search from 'virtual:starlight/components/Search';
 import SocialIcons from 'virtual:starlight/components/SocialIcons';
 import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
-
-const navLinks = [
-  { label: '开发团队', link: '/team/' },
-  {
-    label: '项目文档',
-    items: [
-      { label: 'USF介绍', link: '/first/quick-use/' },
-      { label: '安装USF', link: '/first/import/' },
-      { label: '领地使用方法', link: '/fief/' },
-      { label: '常见问题', link: '/faq/' },
-    ],
-  },
-  { label: '官方下载站', link: 'https://usfdown.zuyst.top' },
-  { label: 'USFrameTeam官方网站', link: 'https://www.usframeteam.top' },
-  { label: 'USFLog-Plus日志', link: 'https://usflogplus.zuyst.top/' },
-];
+import LanguageSelect from 'virtual:starlight/components/LanguageSelect';
 
 const currentPath = Astro.url.pathname;
 ---
@@ -29,29 +13,12 @@ const currentPath = Astro.url.pathname;
     <SiteTitle />
   </div>
   <nav class="nav-links sl-flex print:hidden">
-    {navLinks.map((item) => (
-      'items' in item ? (
-        <div class="dropdown">
-          <button class="dropdown-trigger">
-            {item.label}
-            <svg class="dropdown-arrow" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-          </button>
-          <div class="dropdown-menu">
-            {item.items.map((subItem) => (
-              <a href={subItem.link} class="dropdown-item">{subItem.label}</a>
-            ))}
-          </div>
-        </div>
-      ) : (
-        <a
-          href={item.link}
-          class="nav-link"
-          class:list={currentPath === item.link && 'active'}
-        >
-          {item.label}
-        </a>
-      )
-    ))}
+    <a
+      href="https://docs.usframeteam.top/"
+      class="nav-link"
+    >
+      返回正式站
+    </a>
   </nav>
   <div class="sl-flex print:hidden">
     <Search />
@@ -98,64 +65,6 @@ const currentPath = Astro.url.pathname;
   .nav-link.active {
     color: var(--sl-color-text-accent);
     border-bottom-color: var(--sl-color-text-accent);
-  }
-  .dropdown {
-    position: relative;
-  }
-  .dropdown-trigger {
-    background: none;
-    border: none;
-    color: var(--sl-color-text);
-    font-size: 0.9rem;
-    font-weight: 500;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-    padding: 0.25rem 0;
-    transition: color 0.2s;
-  }
-  .dropdown-trigger:hover {
-    color: var(--sl-color-text-accent);
-  }
-  .dropdown-arrow {
-    transition: transform 0.2s;
-  }
-  .dropdown:hover .dropdown-arrow {
-    transform: rotate(180deg);
-  }
-  .dropdown-menu {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background: var(--sl-color-gray-6);
-    border: 1px solid var(--sl-color-gray-5);
-    border-radius: 0.5rem;
-    padding: 0.5rem 0;
-    min-width: 180px;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(0.5rem);
-    transition: opacity 0.2s, visibility 0.2s, transform 0.2s;
-    z-index: 100;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  }
-  .dropdown:hover .dropdown-menu {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-  }
-  .dropdown-item {
-    display: block;
-    padding: 0.5rem 1rem;
-    color: var(--sl-color-text);
-    text-decoration: none;
-    font-size: 0.85rem;
-    transition: background 0.15s, color 0.15s;
-  }
-  .dropdown-item:hover {
-    background: var(--sl-color-gray-5);
-    color: var(--sl-color-text-accent);
   }
   .right-group,
   .social-icons {
