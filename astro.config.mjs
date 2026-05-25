@@ -1,5 +1,6 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import sitemap from '@astrojs/sitemap';
 import starlightImageZoom from 'starlight-image-zoom';
 import starlightLinksValidator from 'starlight-links-validator';
 import starlightHeadingBadges from 'starlight-heading-badges';
@@ -8,6 +9,7 @@ import remarkPicture from 'remark-picture';
 import { convertToAvif } from './src/scripts/convert-avif.mjs';
 
 export default defineConfig({
+  site: 'https://usfdoctest.zuyst.top',
   markdown: {
     remarkPlugins: [
       [remarkPicture, {
@@ -99,6 +101,7 @@ export default defineConfig({
         AVIF: true,
       },
     }),
+    sitemap(),
     convertToAvif(),
   ],
 });
