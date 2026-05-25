@@ -1,0 +1,43 @@
+---
+title: 物品锁定
+description: USF物品锁定功能使用教程
+---
+
+import { Steps, Aside, Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+由于USF默认使用钟表作为开启菜单的物品，所以可以将钟表锁定到物品栏，方便玩家快速开启菜单。
+
+## 物品锁定设置
+
+<Steps>
+
+1. 进入路径 `管理界面` - `插件设置` - `锁定物品设置`
+2. 点击添加选项
+3. 输入物品id，如果不知道物品ID可查询MinecraftWiki
+   - 例：输入钟表的物品ID: `minecraft:clock`
+4. 设置物品数量: `1`
+5. 提交，物品设置完成
+6. 点击"立即重载"
+
+</Steps>
+
+<Aside type="tip">
+物品锁定设置完成后，钟表会自动出现在物品栏第一位。
+</Aside>
+
+## 删除锁定物品
+
+<Steps>
+
+1. 点击物品ID选项
+2. 点击删除
+3. 提交
+4. 点击"立即重载"
+5. 物品删除完成
+
+</Steps>
+
+## 快速导航
+
+<LinkCard title="介绍" href="/first/quick-use/" description="了解USF插件" />
+<LinkCard title="安装USF" href="/first/import/" description="了解如何安装USF插件" />

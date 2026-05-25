@@ -1,0 +1,21 @@
+/* 限制文档内容区图片显示高度 */
+.sl-markdown-content img {
+  max-height: 300px;
+  width: auto;
+  object-fit: contain;
+  cursor: zoom-in;
+}
+
+/* 亮色模式主题色 - 基于 #336923 */
+:root[data-theme='light'] {
+  --sl-color-accent-low: #e4f0e0;
+  --sl-color-accent: #336923;
+  --sl-color-accent-high: #1a3d10;
+}
+
+/* 暗色模式主题色 - 基于 #336923 */
+:root[data-theme='dark'] {
+  --sl-color-accent-low: #1a3d12;
+  --sl-color-accent: #336923;
+  --sl-color-accent-high: #8cc47a;
+}
