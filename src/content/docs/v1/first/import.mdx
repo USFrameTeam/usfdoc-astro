@@ -1,0 +1,35 @@
+---
+title: V1 安装USF
+description: USF V1版本安装教程
+---
+
+import { Steps, Aside } from '@astrojs/starlight/components';
+
+<Aside type="caution">
+V1版本已停止维护，建议升级到V2版本。
+</Aside>
+
+## 本地安装
+
+<Steps>
+
+1. 下载V1版本的mcaddon文件
+2. 新建存档/打开存档设置
+3. 开启实验性玩法-测试版API
+4. 加载插件行为包、资源包
+5. 进入存档，在主世界运行命令 `/tickingarea add 0 0 0 0 0 0`
+6. 根据提示输入命令 `/scriptevent usf:manager` 获取最高权限OP
+
+</Steps>
+
+## 服务器安装
+
+<Steps>
+
+1. 存档打开测试版api并开启作弊
+2. 解压mcaddon文件
+3. 将行为包上传到服务器的 `behavior_packs` 目录
+4. 配置 `world_behavior_packs.json`
+5. 重启服务器
+
+</Steps>

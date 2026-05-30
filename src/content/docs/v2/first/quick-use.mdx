@@ -1,9 +1,28 @@
 ---
 title: 介绍
 description: 无名氏服务器插件介绍
+head:
+  - tag: style
+    content: |
+      main > .content-panel:first-child { display: none; }
+      .sl-markdown-content > p:first-of-type {
+        margin-left: calc(-1 * var(--sl-content-pad-x));
+        margin-right: calc(-1 * var(--sl-content-pad-x));
+        width: calc(100% + 2 * var(--sl-content-pad-x));
+      }
+      .sl-markdown-content > p:first-of-type picture,
+      .sl-markdown-content > p:first-of-type picture img {
+        width: 100%;
+        max-height: none;
+        object-fit: cover;
+        display: block;
+        border-radius: 0;
+      }
 ---
 
 import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+![USF V2](/V2bg.png)
 
 『无名氏服务器插件』是一个基于原版GameTest框架的插件，让原生BDS也可以拥有很多基础的功能。
 目前下载量已超过3w，期待你的使用
@@ -60,9 +79,9 @@ import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
 ## 快速导航
 
 <CardGrid>
-  <LinkCard title="安装USF" href="/first/import/" description="了解如何安装USF插件" />
-  <LinkCard title="物品锁定" href="/itemlock/" description="将钟锁定为物品栏第一位" />
-  <LinkCard title="领地功能" href="/fief/" description="领地功能使用教程" />
+  <LinkCard title="安装USF" href="/v2/first/import/" description="了解如何安装USF插件" />
+  <LinkCard title="物品锁定" href="/v2/features/itemlock/" description="将钟锁定为物品栏第一位" />
+  <LinkCard title="领地功能" href="/v2/features/land/" description="领地功能使用教程" />
   <LinkCard title="常见问题" href="/faq/" description="使用问题解答" />
   <LinkCard title="USF相关问题" href="/faq/" description="其他常见问题" />
 </CardGrid>
