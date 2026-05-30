@@ -4,6 +4,7 @@ import sitemap from '@astrojs/sitemap';
 import starlightImageZoom from 'starlight-image-zoom';
 import starlightLinksValidator from 'starlight-links-validator';
 import starlightHeadingBadges from 'starlight-heading-badges';
+import starlightLlmsTxt from 'starlight-llms-txt';
 import compress from '@playform/compress';
 import remarkPicture from 'remark-picture';
 import { convertToAvif } from './src/scripts/convert-avif.mjs';
@@ -29,6 +30,10 @@ export default defineConfig({
         starlightImageZoom(),
         starlightLinksValidator(),
         starlightHeadingBadges(),
+        starlightLlmsTxt({
+          projectName: 'USF V2',
+          description: '基于原版SAPI的无名氏服务器管理框架',
+        }),
       ],
       defaultLocale: 'root',
       locales: {
