@@ -62,21 +62,36 @@ export default defineConfig({
           items: [
             { label: '介绍', link: '/first/quick-use/' },
             { label: '安装USF', link: '/first/import/' },
-            { label: '更新日志', link: '/change-log/' },
-            { label: '版本对应表', link: '/edition/' },
+          ],
+        },
+        {
+          label: '功能介绍',
+          collapsed: false,
+          items: [
+            { label: '功能总览', link: '/usage-guide/' },
+            { label: '传送系统', link: '/features/teleport/' },
+            { label: '领地系统', link: '/features/land/' },
+            { label: '商店系统', link: '/features/store/' },
+            { label: '聊天系统', link: '/features/chat/' },
+            { label: '群组系统', link: '/features/group/' },
+            { label: '策略文件', link: '/features/config-file/' },
+            { label: '日志系统', link: '/features/logging/' },
           ],
         },
         {
           label: '使用文档',
           items: [
-            { label: '使用指南', link: '/usage-guide/' },
             { label: '物品锁定', link: '/itemlock/' },
-            { label: '领地', link: '/fief/' },
-            { label: '商店', link: '/shop/' },
-            { label: '功能与工具', link: '/tools/' },
             { label: '自定义菜单', link: '/menu/' },
-            { label: '使用问题与Q&A', link: '/faq/' },
             { label: '手动适配USF插件', link: '/sdgx/' },
+          ],
+        },
+        {
+          label: '参考',
+          items: [
+            { label: '更新日志', link: '/change-log/' },
+            { label: '版本对应表', link: '/edition/' },
+            { label: '使用问题与Q&A', link: '/faq/' },
           ],
         },
         {
