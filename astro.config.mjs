@@ -92,10 +92,9 @@ export default defineConfig({
           },
           {
             id: 'neo',
-            label: 'Neo',
+            label: 'USFNeo',
             link: '/neo/first/quick-use/',
             icon: 'star',
-            badge: { text: '开发中', variant: 'note' },
             items: [
               {
                 label: '快速开始',
@@ -108,15 +107,15 @@ export default defineConfig({
           {
             id: 'more',
             label: '更多',
-            link: '/change-log/',
+            link: '/more/change-log/',
             icon: 'information',
             items: [
               {
                 label: '参考',
                 items: [
-                  { label: '更新日志', link: '/change-log/' },
-                  { label: '版本对应表', link: '/edition/' },
-                  { label: '使用问题与Q&A', link: '/faq/' },
+                  { label: '更新日志', link: '/more/change-log/' },
+                  { label: '版本对应表', link: '/more/edition/' },
+                  { label: '使用问题与Q&A', link: '/more/faq/' },
                 ],
               },
               {
@@ -128,7 +127,7 @@ export default defineConfig({
               {
                 label: '关于我们',
                 items: [
-                  { label: '维护团队', link: '/team/' },
+                  { label: '维护团队', link: '/more/team/' },
                 ],
               },
             ],
