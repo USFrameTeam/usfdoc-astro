@@ -69,6 +69,7 @@ export default defineConfig({
         {
           label: '使用文档',
           items: [
+            { label: '使用指南', link: '/usage-guide/' },
             { label: '物品锁定', link: '/itemlock/' },
             { label: '领地', link: '/fief/' },
             { label: '商店', link: '/shop/' },
