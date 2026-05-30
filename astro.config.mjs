@@ -75,6 +75,7 @@ export default defineConfig({
             { label: '聊天系统', link: '/features/chat/' },
             { label: '群组系统', link: '/features/group/' },
             { label: '策略文件', link: '/features/config-file/' },
+            { label: '实用工具', link: '/features/tools/' },
             { label: '日志系统', link: '/features/logging/' },
           ],
         },
