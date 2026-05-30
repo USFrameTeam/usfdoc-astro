@@ -1,6 +1,6 @@
 ---
-title: USF V2 - 基于原版SAPI的无名氏服务器管理框架
-description: 高性能的Minecraft服务器管理框架
+title: USF官方文档站
+description: 基于原版SAPI的无名氏服务器管理框架
 template: splash
 banner:
   content: 欢迎来到USF文档站测试版！本站仅作技术预览使用，时效信息请前往 https://docs.usframeteam.top/
@@ -10,8 +10,8 @@ hero:
     file: ../../assets/USFLogo.png
     alt: USF Logo
   actions:
-    - text: 快速使用
-      link: /first/quick-use/
+    - text: 进入V2文档
+      link: /v2/first/quick-use/
       variant: primary
       icon: right-arrow
     - text: 下载
@@ -24,17 +24,30 @@ hero:
       icon: external
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
+import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+## 选择版本
+
+请根据你使用的USF版本选择对应的文档：
 
 <CardGrid>
-  <Card title="基于原版 高可用性" icon="laptop">
-    完全使用基岩版原版的Script API开发，无任何其他依赖。
+  <Card title="V2 版本 (推荐)" icon="rocket">
+    基于原版Script API开发，适用于Minecraft 1.21.x及以上版本。
+    功能最全，持续更新中。
+
+    [进入V2文档 →](/v2/first/quick-use/)
   </Card>
-  <Card title="高度优化 极致流畅" icon="add-document">
-    几乎不会对服务器和客户端带来任何压力，代码也是高度优化
+  <Card title="V1 版本" icon="puzzle">
+    基于GameTest框架开发，适用于Minecraft 1.19.50 - 1.20.60版本。
+    已停止维护。
+
+    [进入V1文档 →](/v1/first/quick-use/)
   </Card>
-  <Card title="使用简单 功能丰富" icon="setting">
-    使用起来非常简单顺手，功能特别多，高度支持自定义化
+  <Card title="Neo 版本" icon="star">
+    下一代服务器管理框架，全新架构设计。
+    开发中，敬请期待。
+
+    [进入Neo文档 →](/neo/first/quick-use/)
   </Card>
 </CardGrid>
 
@@ -46,6 +59,15 @@ import { Card, CardGrid } from '@astrojs/starlight/components';
 
 它可用于搭建各种服务器的商店、货币、积分等系统，也可用于方便管理员管理成员。
 目前该插件在全网下载量已超过3w，期待你的使用！
+
+## 快速链接
+
+<CardGrid>
+  <LinkCard title="版本对应表" href="/edition/" description="查看USF版本与Minecraft版本对应关系" />
+  <LinkCard title="更新日志" href="/change-log/" description="查看USF插件的更新历史" />
+  <LinkCard title="使用问题与Q&A" href="/faq/" description="常见问题解答" />
+  <LinkCard title="维护团队" href="/team/" description="了解USF维护团队" />
+</CardGrid>
 
 ## 贡献者
 

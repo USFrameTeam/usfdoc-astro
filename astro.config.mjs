@@ -5,6 +5,7 @@ import starlightImageZoom from 'starlight-image-zoom';
 import starlightLinksValidator from 'starlight-links-validator';
 import starlightHeadingBadges from 'starlight-heading-badges';
 import starlightLlmsTxt from 'starlight-llms-txt';
+import starlightSidebarTopics from 'starlight-sidebar-topics';
 import compress from '@playform/compress';
 import remarkPicture from 'remark-picture';
 import { convertToAvif } from './src/scripts/convert-avif.mjs';
@@ -31,8 +32,109 @@ export default defineConfig({
         starlightLinksValidator(),
         starlightHeadingBadges(),
         starlightLlmsTxt({
-          projectName: 'USF V2',
+          projectName: 'USF',
           description: '基于原版SAPI的无名氏服务器管理框架',
+        }),
+        starlightSidebarTopics([
+          {
+            id: 'v2',
+            label: 'V2',
+            link: '/v2/first/quick-use/',
+            icon: 'rocket',
+            badge: { text: '推荐', variant: 'success' },
+            items: [
+              {
+                label: '快速开始',
+                items: [
+                  { label: '介绍', link: '/v2/first/quick-use/' },
+                  { label: '安装USF', link: '/v2/first/import/' },
+                ],
+              },
+              {
+                label: '功能介绍',
+                collapsed: false,
+                items: [
+                  { label: '功能总览', link: '/v2/usage-guide/' },
+                  { label: '传送系统', link: '/v2/features/teleport/' },
+                  { label: '领地系统', link: '/v2/features/land/' },
+                  { label: '商店系统', link: '/v2/features/store/' },
+                  { label: '聊天系统', link: '/v2/features/chat/' },
+                  { label: '群组系统', link: '/v2/features/group/' },
+                  { label: '策略文件', link: '/v2/features/config-file/' },
+                  { label: '物品锁定', link: '/v2/features/itemlock/' },
+                  { label: '实用工具', link: '/v2/features/tools/' },
+                  { label: '日志系统', link: '/v2/features/logging/' },
+                ],
+              },
+              {
+                label: '开发中功能(发布版本无法使用)',
+                items: [
+                  { label: '自定义变量', link: '/v2/custom/var/' },
+                ],
+              },
+            ],
+          },
+          {
+            id: 'v1',
+            label: 'V1',
+            link: '/v1/first/quick-use/',
+            icon: 'puzzle',
+            badge: { text: '停止维护', variant: 'caution' },
+            items: [
+              {
+                label: '快速开始',
+                items: [
+                  { label: '介绍', link: '/v1/first/quick-use/' },
+                  { label: '安装USF', link: '/v1/first/import/' },
+                ],
+              },
+            ],
+          },
+          {
+            id: 'neo',
+            label: 'Neo',
+            link: '/neo/first/quick-use/',
+            icon: 'star',
+            badge: { text: '开发中', variant: 'note' },
+            items: [
+              {
+                label: '快速开始',
+                items: [
+                  { label: '介绍', link: '/neo/first/quick-use/' },
+                ],
+              },
+            ],
+          },
+          {
+            id: 'more',
+            label: '更多',
+            link: '/change-log/',
+            icon: 'information',
+            items: [
+              {
+                label: '参考',
+                items: [
+                  { label: '更新日志', link: '/change-log/' },
+                  { label: '版本对应表', link: '/edition/' },
+                  { label: '使用问题与Q&A', link: '/faq/' },
+                ],
+              },
+              {
+                label: '开发者',
+                items: [
+                  { label: '手动适配USF插件', link: '/more/sdgx/' },
+                ],
+              },
+              {
+                label: '关于我们',
+                items: [
+                  { label: '维护团队', link: '/team/' },
+                ],
+              },
+            ],
+          },
+        ], {
+          exclude: ['/'],
         }),
       ],
       defaultLocale: 'root',
@@ -56,58 +158,6 @@ export default defineConfig({
         baseUrl: 'http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=IzHiT0hbY4KuL28MOLIHKH1DcSq2Jnde&authKey=O7WwQ4UOKe0d%2BY25voz3S4wGNxYj6YQcZ0%2BuW4zo6L%2FnZI%2BBUOWCYD4UEIGzBoGq&noverify=0&group_code=118123500',
       },
       customCss: ['./src/styles/custom.css'],
-      sidebar: [
-        {
-          label: '快速开始',
-          items: [
-            { label: '介绍', link: '/first/quick-use/' },
-            { label: '安装USF', link: '/first/import/' },
-          ],
-        },
-        {
-          label: '功能介绍',
-          collapsed: false,
-          items: [
-            { label: '功能总览', link: '/usage-guide/' },
-            { label: '传送系统', link: '/features/teleport/' },
-            { label: '领地系统', link: '/features/land/' },
-            { label: '商店系统', link: '/features/store/' },
-            { label: '聊天系统', link: '/features/chat/' },
-            { label: '群组系统', link: '/features/group/' },
-            { label: '策略文件', link: '/features/config-file/' },
-            { label: '实用工具', link: '/features/tools/' },
-            { label: '日志系统', link: '/features/logging/' },
-          ],
-        },
-        {
-          label: '使用文档',
-          items: [
-            { label: '物品锁定', link: '/itemlock/' },
-            { label: '自定义菜单', link: '/menu/' },
-            { label: '手动适配USF插件', link: '/sdgx/' },
-          ],
-        },
-        {
-          label: '参考',
-          items: [
-            { label: '更新日志', link: '/change-log/' },
-            { label: '版本对应表', link: '/edition/' },
-            { label: '使用问题与Q&A', link: '/faq/' },
-          ],
-        },
-        {
-          label: '开发中功能(发布版本无法使用)',
-          items: [
-            { label: '自定义变量', link: '/custom/var/' },
-          ],
-        },
-        {
-          label: '关于我们',
-          items: [
-            { label: '维护团队', link: '/team/' },
-          ],
-        },
-      ],
       head: [
         {
           tag: 'link',
