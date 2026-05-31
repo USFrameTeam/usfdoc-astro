@@ -112,6 +112,19 @@ export default defineConfig({
                   { label: '安装USF', link: '/v1/first/import/' },
                 ],
               },
+              {
+                label: '功能介绍',
+                collapsed: false,
+                items: [
+                  { label: '传送系统', link: '/v1/features/teleport/' },
+                  { label: '聊天系统', link: '/v1/features/chat/' },
+                  { label: '领地系统', link: '/v1/features/land/' },
+                  { label: '队伍系统', link: '/v1/features/team/' },
+                  { label: '管理功能', link: '/v1/features/manage/' },
+                  { label: '实用工具', link: '/v1/features/tools/' },
+                  { label: '高级功能', link: '/v1/features/advanced/' },
+                ],
+              },
             ],
           },
           {
