@@ -1,12 +1,12 @@
 import { defineMiddleware } from 'astro:middleware';
 
-const siteUrl = 'https://usfdoctest.zuyst.top';
-
 const versionConfig: Record<string, { prefix: string; image: string }> = {
-  v2: { prefix: 'USF V2 - ', image: '/V2bg.png' },
-  v1: { prefix: 'USF V1 - ', image: '' },
-  neo: { prefix: 'NeoUSF - ', image: '' },
+  'v2/': { prefix: 'USF V2 - ', image: '/V2bg.png' },
+  'v1/': { prefix: 'USF V1 - ', image: '' },
+  'neo/': { prefix: 'NeoUSF - ', image: '' },
 };
+
+const siteUrl = 'https://usfdoctest.zuyst.top';
 
 export const onRequest = defineMiddleware(async (context, next) => {
   const response = await next();
@@ -16,36 +16,34 @@ export const onRequest = defineMiddleware(async (context, next) => {
 
   if (!contentType.includes('text/html')) return response;
 
-  let version = '';
-  if (pathname.startsWith('/v2/')) version = 'v2';
-  else if (pathname.startsWith('/v1/')) version = 'v1';
-  else if (pathname.startsWith('/neo/')) version = 'neo';
-
-  if (!version) return response;
-
-  const config = versionConfig[version];
+  let config = null;
+  for (const [prefix, cfg] of Object.entries(versionConfig)) {
+    if (pathname.startsWith('/' + prefix)) {
+      config = cfg;
+      break;
+    }
+  }
   if (!config) return response;
 
   const html = await response.text();
+  let modified = html;
 
-  let modified = html.replace(
-    /<meta property="og:title" content="([^"]*)"/,
-    `<meta property="og:title" content="${config.prefix}$1"`
+  modified = modified.replace(
+    /<title>([^|]*)\|([^<]*)<\/title>/,
+    `<title>${config.prefix}$1|$2</title>`
+  );
+
+  modified = modified.replace(
+    /<meta\s+content="([^"]*)"\s+property=og:title\s*\/>/,
+    `<meta content="${config.prefix}$1" property=og:title />`
   );
 
   if (config.image) {
     const imageUrl = siteUrl + config.image;
     modified = modified.replace(
-      /<meta name="twitter:card" content="summary_large_image"/,
-      `<meta name="twitter:card" content="summary_large_image"><meta property="og:image" content="${imageUrl}"><meta name="twitter:image" content="${imageUrl}"`
+      '</head>',
+      `<meta property="og:image" content="${imageUrl}"><meta name="twitter:image" content="${imageUrl}"></head>`
     );
-
-    if (!modified.includes('og:image')) {
-      modified = modified.replace(
-        '</head>',
-        `<meta property="og:image" content="${imageUrl}"><meta name="twitter:image" content="${imageUrl}"><meta name="twitter:card" content="summary_large_image"></head>`
-      );
-    }
   }
 
   return new Response(modified, {
