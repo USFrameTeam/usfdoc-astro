@@ -169,6 +169,7 @@ export default defineConfig({
       },
       logo: {
         src: './public/USFLogo.webp',
+        replacesTitle: true,
       },
       components: {
         Header: './src/components/CustomHeader.astro',
