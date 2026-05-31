@@ -34,6 +34,28 @@ export default defineConfig({
         starlightLlmsTxt({
           projectName: 'USF',
           description: '基于原版SAPI的无名氏服务器管理框架',
+          customSets: [
+            {
+              label: 'V2',
+              paths: ['v2/**'],
+              description: 'USF V2版本文档',
+            },
+            {
+              label: 'V1',
+              paths: ['v1/**'],
+              description: 'USF V1版本文档',
+            },
+            {
+              label: 'Neo',
+              paths: ['neo/**'],
+              description: 'USFNeo版本文档',
+            },
+            {
+              label: 'More',
+              paths: ['more/**'],
+              description: '通用文档（更新日志、版本对应表、FAQ、团队介绍等）',
+            },
+          ],
         }),
         starlightSidebarTopics([
           {
