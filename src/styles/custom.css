@@ -6,6 +6,12 @@
 }
 
 /* 页面过渡动画 - 淡入淡出 */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+}
+
 @keyframes fade-in {
   from { opacity: 0; }
 }
@@ -36,6 +42,26 @@ starlight-menu-button {
 }
 
 @media (max-width: 50rem) {
+  site-search {
+    position: fixed !important;
+    top: calc((var(--sl-nav-height) - 2rem) / 2) !important;
+    inset-inline-end: calc(var(--sl-nav-pad-x) + 6.5rem) !important;
+    z-index: calc(var(--sl-z-index-navbar) + 1) !important;
+  }
+
+  site-search > button {
+    width: 2rem !important;
+    height: 2rem !important;
+    border-radius: 50% !important;
+    background-color: var(--sl-color-gray-6) !important;
+    color: var(--sl-color-text) !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
   starlight-menu-button {
     display: block !important;
     position: fixed !important;
@@ -50,20 +76,32 @@ starlight-menu-button {
     border-radius: 9999px !important;
     background-color: var(--sl-color-text-accent) !important;
     color: white !important;
-    padding: 0.375rem 1rem !important;
+    padding: 0.375rem 0.75rem !important;
     width: auto !important;
     height: 2rem !important;
     align-items: center !important;
-    gap: 0.5rem !important;
-    font-size: var(--sl-text-sm) !important;
+    gap: 0.25rem !important;
+    font-size: 0.8rem !important;
     font-weight: 500 !important;
     box-shadow: none !important;
     top: auto !important;
     inset-inline-end: auto !important;
   }
 
+  starlight-menu-button button .open-menu {
+    display: block !important;
+  }
+
   starlight-menu-button button::after {
     content: '全部文档';
+  }
+
+  starlight-menu-button[aria-expanded='true'] button .open-menu {
+    display: none !important;
+  }
+
+  starlight-menu-button[aria-expanded='true'] button .close-menu {
+    display: block !important;
   }
 
   starlight-menu-button[aria-expanded='true'] button {
