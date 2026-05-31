@@ -26,6 +26,8 @@ hero:
 
 import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
 
+<div class="version-selector">
+
 ## 选择版本
 
 请根据你使用的USF版本选择对应的文档：
@@ -34,19 +36,35 @@ import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
   <Card title="V2 (推荐)" icon="rocket">
     适用于Minecraft 1.21.x及以上版本。
     功能最全，持续更新中。
-
-    [进入V2文档 →](/v2/first/quick-use/)
+    <a href="/v2/first/quick-use/" class="card-arrow-btn" aria-label="进入V2文档">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 12h14"></path>
+        <path d="m12 5 7 7-7 7"></path>
+      </svg>
+    </a>
   </Card>
   <Card title="V1" icon="puzzle">
     适用于Minecraft 1.19.50 - 1.20.60版本。
     已停止维护。
-
-    [进入V1文档 →](/v1/first/quick-use/)
+    <a href="/v1/first/quick-use/" class="card-arrow-btn" aria-label="进入V1文档">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 12h14"></path>
+        <path d="m12 5 7 7-7 7"></path>
+      </svg>
+    </a>
   </Card>
   <Card title="NeoUSF" icon="star">
-    [进入NeoUSF文档 →](/neo/first/quick-use/)
+    cw1551主导开发的"USFV3"。
+    <a href="/neo/first/quick-use/" class="card-arrow-btn" aria-label="进入NeoUSF文档">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 12h14"></path>
+        <path d="m12 5 7 7-7 7"></path>
+      </svg>
+    </a>
   </Card>
 </CardGrid>
+
+</div>
 
 ## 这是什么？
 
