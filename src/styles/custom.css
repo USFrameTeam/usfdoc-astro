@@ -5,45 +5,10 @@
   cursor: zoom-in;
 }
 
-/* 页面过渡动画 - 滑入淡出 */
 @media (prefers-reduced-motion: no-preference) {
   @view-transition {
     navigation: auto;
   }
-}
-
-@keyframes slide-in {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-}
-
-@keyframes slide-out {
-  to {
-    opacity: 0;
-    transform: translateY(-8px);
-  }
-}
-
-::view-transition-old(root) {
-  animation: slide-out 0.25s cubic-bezier(0.4, 0, 1, 1);
-}
-
-::view-transition-new(root) {
-  animation: slide-in 0.3s cubic-bezier(0, 0, 0.2, 1);
-}
-
-.main-frame {
-  view-transition-name: content;
-}
-
-::view-transition-old(content) {
-  animation: slide-out 0.25s cubic-bezier(0.4, 0, 1, 1);
-}
-
-::view-transition-new(content) {
-  animation: slide-in 0.3s cubic-bezier(0, 0, 0.2, 1);
 }
 
 :root[data-theme='light'] {
