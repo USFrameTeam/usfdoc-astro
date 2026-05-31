@@ -5,6 +5,20 @@
   cursor: zoom-in;
 }
 
+/* 页面过渡动画 - 淡入淡出 */
+@keyframes fade-in {
+  from { opacity: 0; }
+}
+@keyframes fade-out {
+  to { opacity: 0; }
+}
+::view-transition-old(root) {
+  animation: fade-out 0.2s ease-out;
+}
+::view-transition-new(root) {
+  animation: fade-in 0.2s ease-in;
+}
+
 :root[data-theme='light'] {
   --sl-color-accent-low: #e4f0e0;
   --sl-color-accent: #336923;
