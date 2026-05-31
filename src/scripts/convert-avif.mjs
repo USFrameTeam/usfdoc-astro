@@ -4,9 +4,6 @@ import { join, extname, relative } from 'node:path';
 
 const CONCURRENCY = 4;
 
-/**
- * 递归查找目录下匹配扩展名的文件
- */
 async function findFiles(dir, extensions) {
   const results = [];
   const entries = await readdir(dir, { withFileTypes: true });
@@ -21,9 +18,6 @@ async function findFiles(dir, extensions) {
   return results;
 }
 
-/**
- * 转换单张图片为 AVIF 和 WebP
- */
 async function convertImage(file, outputDir) {
   const inputBuffer = await readFile(file);
   const originalSize = inputBuffer.length;
@@ -56,9 +50,6 @@ async function convertImage(file, outputDir) {
   return { converted: 1, totalSaved };
 }
 
-/**
- * 分批并发执行
- */
 async function runWithConcurrency(tasks, limit) {
   const results = [];
   for (let i = 0; i < tasks.length; i += limit) {
@@ -69,11 +60,6 @@ async function runWithConcurrency(tasks, limit) {
   return results;
 }
 
-/**
- * Astro 集成：构建后将 dist 目录中的 JPG/PNG 图片转换为 AVIF 和 WebP 格式。
- * 配合 remark-picture 插件生成的 <picture> 标签使用，
- * 浏览器会按 AVIF → WebP → 原始格式的优先级加载图片。
- */
 export function convertToAvif() {
   return {
     name: 'convert-to-avif',
