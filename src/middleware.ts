@@ -4,8 +4,8 @@ const siteUrl = 'https://usfdoctest.zuyst.top';
 
 const versionConfig: Record<string, { prefix: string; image: string }> = {
   v2: { prefix: 'USF V2 - ', image: '/V2bg.png' },
-  v1: { prefix: 'USF V1 - ', image: '/V2bg.png' },
-  neo: { prefix: 'NeoUSF - ', image: '/V2bg.png' },
+  v1: { prefix: 'USF V1 - ', image: '' },
+  neo: { prefix: 'NeoUSF - ', image: '' },
 };
 
 export const onRequest = defineMiddleware(async (context, next) => {
@@ -28,23 +28,24 @@ export const onRequest = defineMiddleware(async (context, next) => {
 
   const html = await response.text();
 
-  const imageUrl = siteUrl + config.image;
-
   let modified = html.replace(
     /<meta property="og:title" content="([^"]*)"/,
     `<meta property="og:title" content="${config.prefix}$1"`
   );
 
-  modified = modified.replace(
-    /<meta name="twitter:card" content="summary_large_image"/,
-    `<meta name="twitter:card" content="summary_large_image"><meta property="og:image" content="${imageUrl}"><meta name="twitter:image" content="${imageUrl}"`
-  );
-
-  if (!modified.includes('og:image')) {
+  if (config.image) {
+    const imageUrl = siteUrl + config.image;
     modified = modified.replace(
-      '</head>',
-      `<meta property="og:image" content="${imageUrl}"><meta name="twitter:image" content="${imageUrl}"><meta name="twitter:card" content="summary_large_image"></head>`
+      /<meta name="twitter:card" content="summary_large_image"/,
+      `<meta name="twitter:card" content="summary_large_image"><meta property="og:image" content="${imageUrl}"><meta name="twitter:image" content="${imageUrl}"`
     );
+
+    if (!modified.includes('og:image')) {
+      modified = modified.replace(
+        '</head>',
+        `<meta property="og:image" content="${imageUrl}"><meta name="twitter:image" content="${imageUrl}"><meta name="twitter:card" content="summary_large_image"></head>`
+      );
+    }
   }
 
   return new Response(modified, {
