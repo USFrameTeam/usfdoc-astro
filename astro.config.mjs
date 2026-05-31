@@ -48,7 +48,7 @@ export default defineConfig({
             {
               label: 'Neo',
               paths: ['neo/**'],
-              description: 'USFNeo版本文档',
+              description: 'NeoUSF版本文档',
             },
             {
               label: 'More',
@@ -114,7 +114,7 @@ export default defineConfig({
           },
           {
             id: 'neo',
-            label: 'USFNeo',
+            label: 'NeoUSF',
             link: '/neo/first/quick-use/',
             icon: 'star',
             items: [
