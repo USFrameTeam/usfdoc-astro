@@ -30,3 +30,43 @@
   --sl-color-accent: #336923;
   --sl-color-accent-high: #8cc47a;
 }
+
+starlight-menu-button {
+  display: none !important;
+}
+
+@media (max-width: 50rem) {
+  starlight-menu-button {
+    display: block !important;
+    position: fixed !important;
+    top: calc((var(--sl-nav-height) - 2rem) / 2) !important;
+    inset-inline-end: var(--sl-nav-pad-x) !important;
+    z-index: var(--sl-z-index-navbar) !important;
+  }
+
+  starlight-menu-button button {
+    display: flex !important;
+    position: static !important;
+    border-radius: 9999px !important;
+    background-color: var(--sl-color-text-accent) !important;
+    color: white !important;
+    padding: 0.375rem 1rem !important;
+    width: auto !important;
+    height: 2rem !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+    font-size: var(--sl-text-sm) !important;
+    font-weight: 500 !important;
+    box-shadow: none !important;
+    top: auto !important;
+    inset-inline-end: auto !important;
+  }
+
+  starlight-menu-button button::after {
+    content: '全部文档';
+  }
+
+  starlight-menu-button[aria-expanded='true'] button {
+    background-color: var(--sl-color-text-accent) !important;
+  }
+}

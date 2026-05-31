@@ -6,7 +6,7 @@ const versionConfig: Record<string, { prefix: string; image: string }> = {
   'neo/': { prefix: 'NeoUSF - ', image: '' },
 };
 
-const siteUrl = 'https://usfdoctest.zuyst.top';
+const siteUrl = 'https://docsdev.usframeteam.top';
 
 export const onRequest = defineMiddleware(async (context, next) => {
   const response = await next();
