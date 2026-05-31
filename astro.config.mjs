@@ -14,6 +14,7 @@ import { convertToAvif } from './src/scripts/convert-avif.mjs';
 export default defineConfig({
   site: 'https://docsdev.usframeteam.top',
   markdown: {
+    gfm: true,
     remarkPlugins: [
       [remarkPicture, {
         formatMapping: {
