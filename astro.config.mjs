@@ -190,6 +190,10 @@ export default defineConfig({
             href: '/favicon.ico',
           },
         },
+        {
+          tag: 'style',
+          content: `@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }`,
+        },
       ],
     }),
     compress({
