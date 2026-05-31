@@ -50,16 +50,22 @@ starlight-menu-button {
   }
 
   site-search > button {
-    width: 2rem !important;
+    width: auto !important;
     height: 2rem !important;
-    border-radius: 50% !important;
+    border-radius: 9999px !important;
     background-color: var(--sl-color-gray-6) !important;
     color: var(--sl-color-text) !important;
     box-shadow: none !important;
-    padding: 0 !important;
+    padding: 0.375rem 0.75rem !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
+    gap: 0.25rem !important;
+    font-size: 0.8rem !important;
+  }
+
+  site-search > button::after {
+    content: '搜索';
   }
 
   starlight-menu-button {
