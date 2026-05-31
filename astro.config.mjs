@@ -12,7 +12,7 @@ import remarkPicture from 'remark-picture';
 import { convertToAvif } from './src/scripts/convert-avif.mjs';
 
 export default defineConfig({
-  site: 'https://usfdoctest.zuyst.top',
+  site: 'https://docsdev.usframeteam.top',
   markdown: {
     remarkPlugins: [
       [remarkPicture, {

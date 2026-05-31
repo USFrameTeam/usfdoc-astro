@@ -23,7 +23,9 @@ import LanguageSelect from 'virtual:starlight/components/LanguageSelect';
     <div class="sl-flex social-icons">
       <SocialIcons />
     </div>
-    <ThemeSelect />
+    <div class="theme-select-wrapper">
+      <ThemeSelect />
+    </div>
     <LanguageSelect />
   </div>
 </div>
@@ -87,6 +89,9 @@ import LanguageSelect from 'virtual:starlight/components/LanguageSelect';
       display: none;
     }
     .social-icons {
+      display: none;
+    }
+    .theme-select-wrapper {
       display: none;
     }
   }
