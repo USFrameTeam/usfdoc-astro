@@ -128,3 +128,224 @@ USF 提供了一些实用工具，让建造和管理更方便！
 <Aside type="note">
 跟踪期间输入 `+op` 可退出跟踪。
 </Aside>
+
+## 编辑物品特殊效果
+
+### 命令执行者
+
+命令执行者可以让物品在使用时执行指定命令。
+
+#### 使用方法
+
+1. 点击“编辑命令集”按钮（有些版本显示错误，显示成“编辑物品集”）
+2. 在弹出的多行编辑器中，每行输入一串命令
+3. 记住你要执行的那串命令现在在第几行（记住行号）
+4. 编辑物品效果，选择命令执行者，下方输入行号
+
+:::note[关于行号]
+假设你要执行的那串命令在第1行，你就填1。
+:::
+
+## USF特殊命令
+
+USF特殊命令是通过 `/scriptevent usf:command` 执行的高级命令，可以实现更多自动化功能。
+
+### 命令格式
+
+```
+/scriptevent usf:command <命令> [参数]
+```
+
+或当执行者就是目标玩家时：
+
+```
+/scriptevent usf:command <命令> [参数]
+```
+
+:::note[关于目标选择器]
+在 show 命令中，目标选择器要写成两个@号，例如 `@e` 要写成 `@@e`。
+:::
+
+### 可用命令
+
+#### 1. code - 执行配置代码
+
+执行配置代码对玩家运行。
+
+```
+/scriptevent usf:command code {"item":"minecraft:apple","amount":1}
+```
+
+#### 2. page - 打开界面
+
+让玩家打开指定界面。
+
+```
+/scriptevent usf:command open <界面ID>
+```
+
+界面ID列表：
+- `cd` - 主菜单
+- `pos` - 传送界面
+- `store` - 商店界面
+- `board` - 公告
+- `chat` - 聊天设置界面
+- `land` - 领地界面
+- `group` - 群组界面
+- `tran` - 转账机
+
+#### 3. hotbar - 切换手持物品
+
+让玩家切换手持物品到指定物品栏。
+
+```
+/scriptevent usf:command hotbar <物品栏序号>
+```
+
+物品栏序号范围：1-9
+
+#### 4. name - 设置玩家名字
+
+设置玩家头顶的名字（支持转义）。
+
+```
+/scriptevent usf:command name set <名字>
+```
+
+或设置名字格式（优先级大于全局名字格式）：
+
+```
+/scriptevent usf:command name format <名字>
+```
+
+#### 5. knock - 附加击退
+
+让玩家附加击退效果。
+
+```
+/scriptevent usf:command knock <x轴方向量> <z轴方向量> <水平击退力度> <垂直击退力度>
+```
+
+#### 6. health - 设置生命值
+
+设置或增加玩家生命值。
+
+```
+/scriptevent usf:command health set <生命值>
+```
+
+或增加生命值：
+
+```
+/scriptevent usf:command health add <生命值>
+```
+
+#### 7. tag - 设置头衔
+
+设置玩家头衔（设置为 Reset 则删除头衔）。
+
+```
+/scriptevent usf:command tag <头衔>
+```
+
+#### 8. fire - 着火
+
+让玩家着火指定时间。
+
+```
+/scriptevent usf:command fire <时间/秒>
+```
+
+#### 9. show - 展示消息
+
+向玩家展示消息（支持转义）。
+
+聊天栏展示：
+```
+/scriptevent usf:command show chat <目标选择器> <消息>
+```
+
+ActionBar展示：
+```
+/scriptevent usf:command show actionbar <目标选择器> <消息>
+```
+
+#### 10. ui - 打开自定义界面
+
+打开方块的自定义界面（该方块不需要在常加载区块，但仅限主世界）。
+
+```
+/scriptevent usf:command ui <x坐标>.<y坐标>.<z坐标>
+```
+
+#### 11. back - 返回死亡点
+
+让玩家返回死亡点（仅玩家死过才能传送）。
+
+```
+/scriptevent usf:command back
+```
+
+#### 12. tpa - 打开传送页面
+
+让玩家打开玩家传送页面。
+
+```
+/scriptevent usf:command tpa
+```
+
+#### 13. commandblock - 运行命令方块
+
+运行一个命令方块（在该命令方块上方放置红石块，持续2tick）。
+
+```
+/scriptevent usf:command commandblock <x坐标> <y坐标> <z坐标>
+```
+
+#### 14. var - 设置全局变量
+
+设置全局变量（注意：全局变量并非永久保存，关服即重置）。
+
+设置变量：
+```
+/scriptevent usf:command var set <变量名> <值>
+```
+
+从计分板复制：
+```
+/scriptevent usf:command var copy <变量名> <计分板ID>
+```
+
+设置为玩家名称：
+```
+/scriptevent usf:command var player name <变量名>
+```
+
+:::note[关于空格]
+若变量值带空格的话，在前面输入 `**`，例如：`/scriptevent usf:command var set A **BB AA CC`
+:::
+
+#### 15. test - 检测计分板分数
+
+检测计分板分数，满足条件时执行命令。
+
+```
+/scriptevent usf:command test <最小值> <最大值> [测试条件] **<命令>
+```
+
+测试条件：
+- `player list` - 玩家数量
+- `tag <标签>` - 含标签的玩家数量
+- `score <计分板ID>` - 该实体计分板分数
+
+#### 16. get - 获取测试数据
+
+获取测试数据并保存到该实体的计分板。
+
+```
+/scriptevent usf:command get <计分板ID> [获取内容]
+```
+
+获取内容：
+- `player list` - 玩家数量
+- `tag <标签>` - 含标签的玩家数量
