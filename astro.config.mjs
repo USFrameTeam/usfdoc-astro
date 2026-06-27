@@ -1,5 +1,4 @@
 import { defineConfig } from 'astro/config';
-import cloudflare from '@astrojs/cloudflare';
 import starlight from '@astrojs/starlight';
 import sitemap from '@astrojs/sitemap';
 import starlightImageZoom from 'starlight-image-zoom';
@@ -13,13 +12,7 @@ import { convertToAvif } from './src/scripts/convert-avif.mjs';
 
 export default defineConfig({
   site: 'https://docsdev.usframeteam.top',
-  // TODO: 启用 Cloudflare 适配器以支持 SSR API 路由（AI 搜索后端）
-  // 当前 Node.js v24 + miniflare 存在兼容性问题，待官方修复后取消注释
-  // output: 'static',
-  // adapter: cloudflare({
-  //   imageService: 'cloudflare',
-  //   platformProxy: { enabled: false },
-  // }),
+  output: 'static',
   markdown: {
     gfm: true,
     remarkPlugins: [
