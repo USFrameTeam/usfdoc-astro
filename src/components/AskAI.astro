@@ -50,18 +50,6 @@ const aiPlatforms = [
       </button>
     ))}
     <div class="ask-ai-menu-divider"></div>
-    <button
-      type="button"
-      class="ask-ai-option ask-ai-option-copy"
-      data-action="copy-markdown"
-      role="menuitem"
-    >
-      <span class="ask-ai-option-name">复制 Markdown</span>
-      <svg class="ask-ai-option-icon-copy" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-      </svg>
-    </button>
   </div>
 </div>
 
@@ -158,14 +146,56 @@ USF 是社区驱动项目，由原作者 EarthDLL 开发，社区志愿者维护
     close();
   }
 
-  /** 处理复制 Markdown 链接 */
+  /** 处理复制 Markdown 内容（从当前页面提取正文文本） */
   async function handleCopyMarkdown() {
-    const currentUrl = window.location.href;
-    const markdownUrl = `${currentUrl}.md`;
-    
     try {
-      await navigator.clipboard.writeText(markdownUrl);
-      
+      // 获取页面正文内容（优先用 Starlight 的 .sl-markdown，fallback 到 article/main）
+      const contentEl =
+        document.querySelector('.sl-markdown') ||
+        document.querySelector('article') ||
+        document.querySelector('main');
+
+      if (!contentEl) throw new Error('找不到页面正文内容');
+
+      // 克隆节点以免影响页面
+      const clone = contentEl.cloneNode(true) as HTMLElement;
+
+      // 移除不需要的元素
+      clone.querySelectorAll('nav, header, footer, aside, [role="navigation"], .sl-breadcrumbs, .sl-pagination, .sl-nav, .ai-search-trigger, .ask-ai').forEach(el => el.remove());
+
+      // 递归提取文本（保留换行）
+      function extractText(node: Node): string {
+        let result = '';
+        node.childNodes.forEach(child => {
+          if (child.nodeType === Node.TEXT_NODE) {
+            result += child.textContent ?? '';
+          } else if (child.nodeType === Node.ELEMENT_NODE) {
+            const el = child as HTMLElement;
+            const tag = el.tagName.toLowerCase();
+            if (['h1','h2','h3','h4','h5','h6'].includes(tag)) {
+              result += '\n' + '#'.repeat(parseInt(tag[1])) + ' ' + el.textContent?.trim() + '\n';
+            } else if (tag === 'p') {
+              result += '\n' + el.textContent?.trim() + '\n';
+            } else if (tag === 'li') {
+              result += '- ' + el.textContent?.trim() + '\n';
+            } else if (tag === 'pre' || tag === 'code') {
+              result += '`' + el.textContent?.trim() + '`\n';
+            } else if (tag === 'blockquote') {
+              result += '> ' + el.textContent?.trim().replace(/\n/g, '\n> ') + '\n';
+            } else if (tag === 'br') {
+              result += '\n';
+            } else {
+              result += extractText(child);
+            }
+          }
+        });
+        return result;
+      }
+
+      let text = extractText(clone).replace(/\n{3,}/g, '\n\n').trim();
+
+      await navigator.clipboard.writeText(text);
+
       // 显示复制成功提示
       const copyBtn = root!.querySelector('.ask-ai-option-copy');
       const originalText = copyBtn?.querySelector('.ask-ai-option-name')?.textContent;
@@ -178,11 +208,11 @@ USF 是社区驱动项目，由原作者 EarthDLL 开发，社区志愿者维护
           }, 1500);
         }
       }
-      
+
       close();
     } catch (err) {
       console.error('复制失败:', err);
-      alert('复制失败，请手动复制链接: ' + markdownUrl);
+      alert('复制失败: ' + (err instanceof Error ? err.message : String(err)));
     }
   }
 
