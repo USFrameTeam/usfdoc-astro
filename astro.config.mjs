@@ -1,4 +1,5 @@
 import { defineConfig } from 'astro/config';
+import cloudflare from '@astrojs/cloudflare';
 import starlight from '@astrojs/starlight';
 import sitemap from '@astrojs/sitemap';
 import starlightImageZoom from 'starlight-image-zoom';
@@ -6,13 +7,19 @@ import starlightLinksValidator from 'starlight-links-validator';
 import starlightHeadingBadges from 'starlight-heading-badges';
 import starlightLlmsTxt from 'starlight-llms-txt';
 import starlightSidebarTopics from 'starlight-sidebar-topics';
-import { viewTransitions } from 'astro-vtbot/starlight-view-transitions';
 import compress from '@playform/compress';
 import remarkPicture from 'remark-picture';
 import { convertToAvif } from './src/scripts/convert-avif.mjs';
 
 export default defineConfig({
   site: 'https://docsdev.usframeteam.top',
+  // TODO: 启用 Cloudflare 适配器以支持 SSR API 路由（AI 搜索后端）
+  // 当前 Node.js v24 + miniflare 存在兼容性问题，待官方修复后取消注释
+  // output: 'static',
+  // adapter: cloudflare({
+  //   imageService: 'cloudflare',
+  //   platformProxy: { enabled: false },
+  // }),
   markdown: {
     gfm: true,
     remarkPlugins: [
@@ -33,7 +40,6 @@ export default defineConfig({
         starlightImageZoom(),
         starlightLinksValidator(),
         starlightHeadingBadges(),
-        viewTransitions(),
         starlightLlmsTxt({
           projectName: 'USF',
           description: '基于原版SAPI的无名氏服务器管理框架',
@@ -187,6 +193,7 @@ export default defineConfig({
       },
       components: {
         Header: './src/components/CustomHeader.astro',
+        PageTitle: './src/components/CustomPageTitle.astro',
       },
       social: [
         { icon: 'github', label: 'GitHub', href: 'https://github.com/EarthDLL/Unknown-Server-Framework' },

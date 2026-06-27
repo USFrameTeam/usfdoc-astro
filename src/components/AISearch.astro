@@ -1,0 +1,473 @@
+---
+/**
+ * AI Search component - floating chat widget in bottom-right corner
+ */
+
+interface Props {
+  apiEndpoint?: string;
+}
+
+const { apiEndpoint = '/api/ai-search' } = Astro.props;
+---
+
+<button
+  type="button"
+  class="ai-search-trigger"
+  data-api={apiEndpoint}
+  aria-label="AI 搜索"
+>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" />
+  </svg>
+  <span class="ai-search-label">AI</span>
+</button>
+
+<div class="ai-float-widget" aria-hidden="true">
+  <div class="ai-float-panel" role="dialog" aria-modal="false" aria-label="AI 搜索">
+    <header class="ai-float-header">
+      <h2 class="ai-float-title">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" />
+        </svg>
+        AI 文档助手
+      </h2>
+      <button type="button" class="ai-float-close" aria-label="关闭">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M18 6 6 18" />
+          <path d="m6 6 12 12" />
+        </svg>
+      </button>
+    </header>
+
+    <div class="ai-float-messages" aria-live="polite">
+      <div class="ai-float-empty">
+        <p>基于 USF 官方文档的 AI 助手</p>
+        <p class="ai-float-empty-hint">输入你的问题，我会根据文档内容为你解答</p>
+      </div>
+    </div>
+
+    <form class="ai-float-input-form" autocomplete="off">
+      <div class="ai-float-input-wrapper">
+        <input
+          type="text"
+          class="ai-float-input"
+          placeholder="输入你的问题..."
+          aria-label="向 AI 提问"
+        />
+        <button type="submit" class="ai-float-send" aria-label="发送">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="m22 2-7 20-4-9-9-4Z" />
+            <path d="M22 2 11 13" />
+          </svg>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  import '../scripts/ai-search';
+</script>
+
+<style>
+  /* Floating trigger button */
+  .ai-search-trigger {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    z-index: 9998;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    border: none;
+    border-radius: 50%;
+    background: var(--sl-color-accent);
+    color: white;
+    font-size: var(--sl-text-sm);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2), 0 2px 6px rgba(0, 0, 0, 0.15);
+    will-change: transform;
+  }
+
+  .ai-search-trigger:hover {
+    background: var(--sl-color-accent-high);
+    transform: scale(1.08);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25), 0 3px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .ai-search-trigger:active {
+    transform: scale(0.95);
+  }
+
+  .ai-search-trigger svg {
+    flex-shrink: 0;
+  }
+
+  .ai-search-label {
+    display: none;
+  }
+
+  .ai-search-trigger[data-active] {
+    background: var(--sl-color-gray-6);
+    transform: scale(0.95);
+  }
+
+  /* Float widget container */
+  .ai-float-widget {
+    position: fixed;
+    bottom: 5.5rem;
+    right: 1.5rem;
+    z-index: 9999;
+    pointer-events: none;
+    opacity: 0;
+    transform: scale(0.9) translateY(0.5rem);
+    transform-origin: bottom right;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    will-change: transform, opacity;
+  }
+
+  .ai-float-widget[data-open] {
+    pointer-events: auto;
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+
+  /* Float panel */
+  .ai-float-panel {
+    width: 380px;
+    height: 520px;
+    max-height: calc(100vh - 6rem);
+    background: var(--sl-color-bg);
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+
+  /* Header */
+  .ai-float-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.875rem 1rem;
+    border-bottom: 1px solid var(--sl-color-gray-5);
+    flex-shrink: 0;
+    background: var(--sl-color-gray-7);
+  }
+
+  .ai-float-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+    font-size: var(--sl-text-sm);
+    font-weight: 600;
+    color: var(--sl-color-white);
+  }
+
+  .ai-float-title svg {
+    color: var(--sl-color-accent-high);
+  }
+
+  .ai-float-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border: none;
+    border-radius: 50%;
+    background: var(--sl-color-gray-6);
+    color: var(--sl-color-gray-3);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .ai-float-close:hover {
+    background: var(--sl-color-gray-5);
+    color: var(--sl-color-white);
+  }
+
+  /* Messages */
+  .ai-float-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    scroll-behavior: smooth;
+  }
+
+  .ai-float-empty {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: var(--sl-color-gray-3);
+    text-align: center;
+    padding: 1.5rem;
+  }
+
+  .ai-float-empty p {
+    margin: 0;
+    font-size: var(--sl-text-sm);
+  }
+
+  .ai-float-empty-hint {
+    font-size: var(--sl-text-xs) !important;
+    color: var(--sl-color-gray-4);
+  }
+
+  /* Message bubbles */
+  :global(.ai-msg) {
+    max-width: 85%;
+    padding: 0.625rem 0.875rem;
+    border-radius: 0.75rem;
+    font-size: var(--sl-text-xs);
+    line-height: 1.6;
+    word-break: break-word;
+  }
+
+  :global(.ai-msg-user) {
+    align-self: flex-end;
+    background: var(--sl-color-accent);
+    color: white;
+    border-bottom-right-radius: 0.25rem;
+  }
+
+  :global(.ai-msg-ai) {
+    align-self: flex-start;
+    background: var(--sl-color-gray-6);
+    color: var(--sl-color-text);
+    border-bottom-left-radius: 0.25rem;
+  }
+
+  :global(.ai-msg-ai code) {
+    background: var(--sl-color-gray-5);
+    padding: 0.1rem 0.35rem;
+    border-radius: 0.25rem;
+    font-size: 0.85em;
+  }
+
+  :global(.ai-msg-ai pre) {
+    background: var(--sl-color-gray-5);
+    padding: 0.625rem;
+    border-radius: 0.5rem;
+    overflow-x: auto;
+    margin: 0.375rem 0;
+  }
+
+  :global(.ai-msg-ai pre code) {
+    background: none;
+    padding: 0;
+  }
+
+  :global(.ai-msg-ai a) {
+    color: var(--sl-color-text-accent);
+    text-decoration: underline;
+  }
+
+  :global(.ai-msg-ai strong) {
+    color: var(--sl-color-white);
+  }
+
+  :global(.ai-msg-error) {
+    align-self: center;
+    background: rgba(220, 38, 38, 0.1);
+    color: #ef4444;
+    border: 1px solid rgba(220, 38, 38, 0.2);
+    font-size: 0.7rem;
+  }
+
+  /* Typing indicator */
+  :global(.ai-typing) {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.625rem 0.875rem;
+  }
+
+  :global(.ai-typing-dot) {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--sl-color-gray-4);
+  }
+
+  /* Input area */
+  .ai-float-input-form {
+    flex-shrink: 0;
+    padding: 0.75rem 1rem;
+    border-top: 1px solid var(--sl-color-gray-5);
+  }
+
+  .ai-float-input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    background: var(--sl-color-gray-6);
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.625rem;
+    padding: 0.375rem 0.375rem 0.375rem 0.875rem;
+    transition: border-color 0.2s ease;
+  }
+
+  .ai-float-input-wrapper:focus-within {
+    border-color: var(--sl-color-accent);
+  }
+
+  .ai-float-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    color: var(--sl-color-text);
+    font-size: var(--sl-text-xs);
+    outline: none;
+    min-width: 0;
+  }
+
+  .ai-float-input::placeholder {
+    color: var(--sl-color-gray-4);
+  }
+
+  .ai-float-send {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border: none;
+    border-radius: 0.5rem;
+    background: var(--sl-color-accent);
+    color: white;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.15s ease;
+  }
+
+  .ai-float-send:hover {
+    background: var(--sl-color-accent-high);
+  }
+
+  .ai-float-send:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* Mobile - Bottom Sheet */
+  @media (max-width: 50rem) {
+    .ai-float-widget {
+      inset: 0;
+      bottom: 0;
+      right: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      transform: none;
+      transform-origin: bottom center;
+    }
+
+    .ai-float-widget[data-open] {
+      transform: none;
+    }
+
+    /* Backdrop */
+    .ai-float-widget::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    .ai-float-widget[data-open]::before {
+      opacity: 1;
+    }
+
+    .ai-float-panel {
+      width: 100%;
+      height: 66vh;
+      max-height: 66vh;
+      border-radius: 1rem 1rem 0 0;
+      transform: translateY(100%);
+      transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+      position: relative;
+      z-index: 1;
+    }
+
+    .ai-float-widget[data-open] .ai-float-panel {
+      transform: translateY(0);
+    }
+
+    .ai-float-header {
+      padding-top: 1.25rem;
+    }
+
+    /* Drag handle */
+    .ai-float-header::before {
+      content: '';
+      position: absolute;
+      top: 0.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2rem;
+      height: 0.25rem;
+      border-radius: 9999px;
+      background: var(--sl-color-gray-5);
+    }
+  }
+</style>

@@ -70,7 +70,7 @@ starlight-menu-button {
   site-search {
     position: fixed !important;
     top: calc((var(--sl-nav-height) - 2rem) / 2) !important;
-    inset-inline-end: calc(var(--sl-nav-pad-x) + 6.5rem) !important;
+    inset-inline-end: calc(var(--sl-nav-pad-x) + 7.5rem) !important;
     z-index: calc(var(--sl-z-index-navbar) + 1) !important;
   }
 

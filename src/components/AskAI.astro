@@ -1,0 +1,374 @@
+---
+/**
+ * Ask AI 组件 - 点击展开下拉菜单，选择 AI 平台后直接跳转
+ * prompt 固定为：帮我理解文档内容，并在{URL}了解全部信息
+ */
+
+const aiPlatforms = [
+  { name: 'ChatGPT', id: 'chatgpt', color: '#10a37f' },
+  { name: 'Claude', id: 'claude', color: '#c6613f' },
+  { name: '通义千问', id: 'qianwen', color: '#615ced' },
+  { name: '豆包', id: 'doubao', color: '#0066ff' },
+  { name: 'Kimi', id: 'kimi', color: '#1a1a1a' },
+  { name: 'Grok', id: 'grok', color: '#000000' },
+  { name: 'Perplexity', id: 'perplexity', color: '#20808d' },
+];
+---
+
+<div class="ask-ai" data-open="false">
+  <button
+    type="button"
+    class="ask-ai-btn"
+    aria-label="Ask AI"
+    aria-expanded="false"
+  >
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446A9 9 0 1 1 8.25 4.09" />
+      <path d="M16 3l0 4" />
+      <path d="M18 5l-4 0" />
+      <path d="M21 8l-3 0" />
+    </svg>
+    <span class="ask-ai-label">Ask AI</span>
+    <svg class="ask-ai-caret" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="m6 9 6 6 6-6" />
+    </svg>
+  </button>
+
+  <div class="ask-ai-menu" role="menu">
+    <div class="ask-ai-menu-header">对USF文档进行深度提问</div>
+    {aiPlatforms.map((p) => (
+      <button
+        type="button"
+        class="ask-ai-option"
+        data-platform={p.id}
+        role="menuitem"
+      >
+        <span class="ask-ai-option-name">{p.name}</span>
+        <svg class="ask-ai-option-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M7 7h10v10" /><path d="M7 17 17 7" />
+        </svg>
+      </button>
+    ))}
+    <div class="ask-ai-menu-divider"></div>
+    <button
+      type="button"
+      class="ask-ai-option ask-ai-option-copy"
+      data-action="copy-markdown"
+      role="menuitem"
+    >
+      <span class="ask-ai-option-name">复制 Markdown</span>
+      <svg class="ask-ai-option-icon-copy" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<script>
+  const root = document.querySelector<HTMLDivElement>('.ask-ai');
+  const btn = root?.querySelector<HTMLButtonElement>('.ask-ai-btn');
+
+  function open() {
+    root!.dataset.open = 'true';
+    btn!.setAttribute('aria-expanded', 'true');
+  }
+
+  function close() {
+    root!.dataset.open = 'false';
+    btn!.setAttribute('aria-expanded', 'false');
+  }
+
+  function toggle() {
+    root!.dataset.open === 'true' ? close() : open();
+  }
+
+  /** 构造 AI 平台跳转 URL */
+  function buildAIUrl(platform: string, prompt: string): string {
+    const encoded = encodeURIComponent(prompt);
+    switch (platform) {
+      case 'chatgpt':
+        return `https://chatgpt.com/?q=${encoded}`;
+      case 'claude':
+        return `https://claude.ai/new?q=${encoded}`;
+      case 'qianwen':
+        return `https://www.qianwen.com/qianwen/?q=${encoded}`;
+      case 'doubao':
+        return `https://www.doubao.com/chat/url-action?action=${encodeURIComponent(JSON.stringify({ pluginId: 'Send_Message', payload: { text: prompt } }))}`;
+      case 'kimi':
+        return `https://www.kimi.com/_prefill_chat?prefill_prompt=${encoded}`;
+      case 'grok':
+        return `https://grok.com/?q=${encoded}`;
+      case 'perplexity':
+        return `https://www.perplexity.ai/search?q=${encoded}`;
+      default:
+        return `https://chatgpt.com/?q=${encoded}`;
+    }
+  }
+
+  /** 根据 URL 路径判断文档版本 */
+  function getDocVersion(pathname: string): string {
+    if (pathname.startsWith('/v2/')) return 'V2';
+    if (pathname.startsWith('/v1/')) return 'V1';
+    if (pathname.startsWith('/neo/')) return 'NeoUSF';
+    return 'V2';
+  }
+
+  /** 处理选择 AI 平台 */
+  function handlePlatform(platform: string) {
+    const currentUrl = window.location.href;
+    const pathname = window.location.pathname;
+    const version = getDocVersion(pathname);
+
+    const prompt = `请阅读以下 USF 文档页面，并基于文档内容准确回答我的问题。
+
+【项目背景】
+USF（无名氏服务器管理框架，Unknown-Server-Framework）是基于 Minecraft 基岩版 ScriptAPI 开发的服务器综合管理框架，适用于原版存档、BDS 或 LLBDS 服务端。核心功能包括领地管理、传送系统、商店系统、交易系统、货币积分、服务器成员管理等。全网下载量已超过 3 万。
+
+【版本规划】
+- V2（推荐）：适用于 Minecraft 1.21.x 及以上版本，功能最为完善，持续更新维护中
+- V1：适用于 Minecraft 1.19.50 - 1.20.60 版本，已停止维护
+- NeoUSF：由社区主导开发的新一代版本
+
+【社区信息】
+USF 是社区驱动项目，由原作者 EarthDLL 开发，社区志愿者维护文档。
+- MineBBS：https://www.minebbs.com/resources/usf-v.5475/
+- 苦力怕论坛：https://klpbbs.com/thread-131213-1-1.html
+- 交流渠道：QQ群 107403959
+
+【当前页面信息】
+- 页面地址：${currentUrl}
+- 所属版本：${version}
+
+【文档索引（llms.txt）】
+建议先阅读以下对应版本的结构化文档索引，获取更完整的上下文：
+- V2：${window.location.origin}/_llms-txt/v2.txt
+- V1：${window.location.origin}/_llms-txt/v1.txt
+- NeoUSF：${window.location.origin}/_llms-txt/neo.txt
+- 通用：${window.location.origin}/_llms-txt/more.txt
+
+【回答要求】
+请严格以文档内容为准进行回答。若文档中未涉及相关内容，请直接说明"文档未涉及此内容"，切勿推测或编造。回答时请注意：
+1. 优先使用文档中的准确术语和配置示例
+2. 如涉及命令或配置，请完整引用文档内容
+3. 若文档中有多个相关章节，请综合参考`;
+
+    const targetUrl = buildAIUrl(platform, prompt);
+    window.open(targetUrl, '_blank', 'noopener,noreferrer');
+    close();
+  }
+
+  /** 处理复制 Markdown 链接 */
+  async function handleCopyMarkdown() {
+    const currentUrl = window.location.href;
+    const markdownUrl = `${currentUrl}.md`;
+    
+    try {
+      await navigator.clipboard.writeText(markdownUrl);
+      
+      // 显示复制成功提示
+      const copyBtn = root!.querySelector('.ask-ai-option-copy');
+      const originalText = copyBtn?.querySelector('.ask-ai-option-name')?.textContent;
+      if (copyBtn) {
+        const nameEl = copyBtn.querySelector('.ask-ai-option-name');
+        if (nameEl) {
+          nameEl.textContent = '已复制!';
+          setTimeout(() => {
+            nameEl.textContent = originalText || '复制 Markdown';
+          }, 1500);
+        }
+      }
+      
+      close();
+    } catch (err) {
+      console.error('复制失败:', err);
+      alert('复制失败，请手动复制链接: ' + markdownUrl);
+    }
+  }
+
+  if (btn && root) {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggle();
+    });
+
+    root.querySelectorAll('.ask-ai-option').forEach(opt => {
+      opt.addEventListener('click', () => {
+        const platform = opt.getAttribute('data-platform');
+        const action = opt.getAttribute('data-action');
+        
+        if (action === 'copy-markdown') {
+          handleCopyMarkdown();
+        } else if (platform) {
+          handlePlatform(platform);
+        }
+      });
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!root.contains(e.target as Node)) close();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && root.dataset.open === 'true') {
+        close();
+        btn.focus();
+      }
+    });
+  }
+</script>
+
+<style>
+  .ask-ai {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .ask-ai-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.3rem 0.65rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 9999px;
+    background: var(--sl-color-bg);
+    color: var(--sl-color-text);
+    font-size: var(--sl-text-xs);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+    line-height: 1;
+  }
+
+  .ask-ai-btn:hover {
+    border-color: var(--sl-color-accent);
+    color: var(--sl-color-white);
+    background: var(--sl-color-gray-6);
+  }
+
+  .ask-ai-btn svg:first-child {
+    color: var(--sl-color-accent-high);
+    flex-shrink: 0;
+  }
+
+  .ask-ai-label {
+    font-weight: 600;
+  }
+
+  .ask-ai-caret {
+    opacity: 0.5;
+    transition: transform 0.15s ease;
+  }
+
+  .ask-ai[data-open="true"] .ask-ai-caret {
+    transform: rotate(180deg);
+  }
+
+  .ask-ai-menu {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    min-width: 160px;
+    background: var(--sl-color-bg);
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.625rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    padding: 0.25rem;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-4px) scale(0.97);
+    transform-origin: top left;
+    transition: all 0.12s ease;
+    z-index: 100;
+  }
+
+  .ask-ai[data-open="true"] .ask-ai-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+  }
+
+  .ask-ai-menu-header {
+    padding: 0.375rem 0.5rem 0.25rem;
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: var(--sl-color-gray-3);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .ask-ai-option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.4rem 0.5rem;
+    border: none;
+    border-radius: 0.375rem;
+    background: transparent;
+    color: var(--sl-color-text);
+    font-size: var(--sl-text-sm);
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.1s ease;
+  }
+
+  .ask-ai-option:hover {
+    background: var(--sl-color-gray-6);
+  }
+
+  .ask-ai-option-name {
+    flex: 1;
+    font-weight: 500;
+  }
+
+  .ask-ai-option-arrow {
+    opacity: 0;
+    color: var(--sl-color-gray-4);
+    transform: translateX(-2px);
+    transition: all 0.1s ease;
+    flex-shrink: 0;
+  }
+
+  .ask-ai-option:hover .ask-ai-option-arrow {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .ask-ai-menu-divider {
+    height: 1px;
+    background: var(--sl-color-gray-5);
+    margin: 0.25rem 0;
+  }
+
+  .ask-ai-option-copy {
+    color: var(--sl-color-accent-high);
+  }
+
+  .ask-ai-option-copy:hover {
+    background: var(--sl-color-accent-low);
+  }
+
+  .ask-ai-option-icon-copy {
+    opacity: 0.6;
+    flex-shrink: 0;
+  }
+
+  .ask-ai-option-copy:hover .ask-ai-option-icon-copy {
+    opacity: 1;
+  }
+
+  @media (max-width: 50rem) {
+    .ask-ai-label {
+      display: none;
+    }
+    .ask-ai-caret {
+      display: none;
+    }
+    .ask-ai-btn {
+      padding: 0.35rem;
+    }
+  }
+</style>
