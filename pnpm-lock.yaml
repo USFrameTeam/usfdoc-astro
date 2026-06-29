@@ -45,8 +45,8 @@ importers:
         specifier: ^0.10.0
         version: 0.10.0(@astrojs/starlight@0.39.2(astro@6.4.8(@types/node@25.9.1)(lightningcss@1.32.0)(rollup@4.62.2)(terser@5.46.1)(yaml@2.9.0)))(astro@6.4.8(@types/node@25.9.1)(lightningcss@1.32.0)(rollup@4.62.2)(terser@5.46.1)(yaml@2.9.0))
       starlight-sidebar-topics:
-        specifier: ^0.7.1
-        version: 0.7.1(@astrojs/starlight@0.39.2(astro@6.4.8(@types/node@25.9.1)(lightningcss@1.32.0)(rollup@4.62.2)(terser@5.46.1)(yaml@2.9.0)))
+        specifier: ^0.8.0
+        version: 0.8.0(@astrojs/starlight@0.39.2(astro@6.4.8(@types/node@25.9.1)(lightningcss@1.32.0)(rollup@4.62.2)(terser@5.46.1)(yaml@2.9.0)))
     devDependencies:
       '@playform/compress':
         specifier: ^0.2.3
@@ -2016,8 +2016,8 @@ packages:
       '@astrojs/starlight': '>=0.38.0'
       astro: ^6.0.0
 
-  starlight-sidebar-topics@0.7.1:
-    resolution: {integrity: sha512-2PBR05ZUvnKNoJtbL2u6GoE1qmQD0tFcd5+inYEJHJkx3LE2P+vlNslofTGHLtzch2XzyNbHUBQQu35bouA6NQ==}
+  starlight-sidebar-topics@0.8.0:
+    resolution: {integrity: sha512-hE8+w2vNL13h6cq3UJGl05milJQ3+1BSlhaV5V4a993YzYczU6uLAj6jfUDKQ2mmgkdVWp8/UNDF4Je/rQXNQw==}
     engines: {node: '>=22.12.0'}
     peerDependencies:
       '@astrojs/starlight': '>=0.38.0'
@@ -4895,7 +4895,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  starlight-sidebar-topics@0.7.1(@astrojs/starlight@0.39.2(astro@6.4.8(@types/node@25.9.1)(lightningcss@1.32.0)(rollup@4.62.2)(terser@5.46.1)(yaml@2.9.0))):
+  starlight-sidebar-topics@0.8.0(@astrojs/starlight@0.39.2(astro@6.4.8(@types/node@25.9.1)(lightningcss@1.32.0)(rollup@4.62.2)(terser@5.46.1)(yaml@2.9.0))):
     dependencies:
       '@astrojs/starlight': 0.39.2(astro@6.4.8(@types/node@25.9.1)(lightningcss@1.32.0)(rollup@4.62.2)(terser@5.46.1)(yaml@2.9.0))
       picomatch: 4.0.4
